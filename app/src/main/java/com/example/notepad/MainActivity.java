@@ -12,12 +12,14 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-
-        // Создаем фрагмент
-        CitiesFragment citiesFragment = new CitiesFragment();
-        // Вызываем FragmentManager
-        getSupportFragmentManager()
-                .beginTransaction()
-                .replace(R.id.fragment_container, citiesFragment).commit();
+        if (getResources().getConfiguration().orientation == Configuration.ORIENTATION_LANDSCAPE) {
+            getSupportFragmentManager()
+                    .beginTransaction()
+                    .replace(R.id.coat_of_arms_container, CoatOfArmsFragment.newInstance(0)).commit();
+        } else {
+            getSupportFragmentManager()
+                    .beginTransaction()
+                    .replace(R.id.fragment_container, new CitiesFragment()).commit();
+        }
     }
 }
