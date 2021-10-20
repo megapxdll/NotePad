@@ -1,5 +1,14 @@
 <resources>
-    <string name="app_name">NotePad</string>
-    <!-- TODO: Remove or change this placeholder text -->
+    <string name="app_name">Cities</string>
+    <string name="ebrg">Екатеринбург</string>
+    <string name="msc">Москва</string>
+    <string name="nsk">Новосибирск</string>
+    <string name="sam">Самара</string>
+    <string name="spb">Cпб</string>
+
     <string name="hello_blank_fragment">Hello blank fragment</string>
+    <string name="first_fragment">First Fragment</string>
+    <string name="second_fragment">Second Fragment</string>
+    <string name="third_fragment">Third Fragment</string>
+    <string name="fourth_fragment">Fourth Fragment</string>
 </resources>
