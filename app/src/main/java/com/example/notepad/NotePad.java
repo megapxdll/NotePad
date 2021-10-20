@@ -1,23 +1,68 @@
 package com.example.notepad;
 
-import com.google.type.DateTime;
+import android.os.Parcel;
+import android.os.Parcelable;
 
-public class NotePad {
-    private String Name;
-    private String Description;
-    private String Date;
+import androidx.annotation.StringRes;
 
-    public NotePad(String name, String description, String date) {
-        Name = name;
-        Description = description;
-        Date = date;
+
+public class NotePad implements Parcelable{
+
+    @StringRes
+    private int name;
+
+    @StringRes
+    private int description;
+
+    @StringRes
+    private int date;
+
+    public NotePad(int name, int description, int date) {
+        this.name = name;
+        this.description = description;
+        this.date = date;
     }
 
-    public String getData() {
-        return Name + ": " + Description + " (" + Date + ")";
+    protected NotePad(Parcel in) {
+        name = in.readInt();
+        description = in.readInt();
+        date = in.readInt();
     }
 
-    public String getDescription() {
-        return Description;
+    public static final Creator<NotePad> CREATOR = new Creator<NotePad>() {
+        @Override
+        public NotePad createFromParcel(Parcel in) {
+            return new NotePad(in);
+        }
+
+        @Override
+        public NotePad[] newArray(int size) {
+            return new NotePad[size];
+        }
+    };
+
+    public int getName() {
+        return name;
     }
+
+    public int getDescription() {
+        return description;
+    }
+
+    public int getDate() {
+        return date;
+    }
+
+    @Override
+    public int describeContents() {
+        return 0;
+    }
+
+    @Override
+    public void writeToParcel(Parcel dest, int flags) {
+        dest.writeInt(name);
+        dest.writeInt(description);
+        dest.writeInt(date);
+    }
+
 }
