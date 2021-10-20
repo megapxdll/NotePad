@@ -35,7 +35,6 @@ public class OpenNodeFragment extends Fragment {
         if (arguments != null) {
             int index = arguments.getInt(ARG_INDEX);
             TextView nodeDesc = view.findViewById(R.id.node_description);
-            nodeDesc.getText();
         }
     }
 

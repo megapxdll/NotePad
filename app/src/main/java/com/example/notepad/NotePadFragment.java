@@ -1,5 +1,6 @@
 package com.example.notepad;
 
+import android.graphics.Path;
 import android.os.Bundle;
 
 import androidx.annotation.NonNull;
@@ -45,9 +46,23 @@ public class NotePadFragment extends Fragment {
             TextView textView = new TextView(getContext());
             textView.setText(notePad.getData());
             textView.setTextSize(20);
-            textView.setBackgroundResource(R.color.teal_700);
+            textView.setPadding(10, 50, 10, 100);
             layoutView.addView(textView);
+            final int position = i;
+            textView.setOnClickListener(v -> {
+                showOpenNodeFragment(position);
+            });
+
         }
+    }
+
+    private void showOpenNodeFragment(int index) {
+        OpenNodeFragment openNodeFragment = OpenNodeFragment.newInstance(index);
+        FragmentManager fragmentManager = requireActivity().getSupportFragmentManager();
+        FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
+        // добавляем фрагмент через add
+        fragmentTransaction.add(R.id.fragment_container, openNodeFragment);
+        fragmentTransaction.commit();
     }
 
 }
