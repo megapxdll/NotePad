@@ -1,14 +1,19 @@
 <resources>
     <string name="app_name">Cities</string>
-    <string name="ebrg">Екатеринбург</string>
-    <string name="msc">Москва</string>
-    <string name="nsk">Новосибирск</string>
-    <string name="sam">Самара</string>
-    <string name="spb">Cпб</string>
+    <string name="note1">Заметка 1</string>
+    <string name="note2">Заметка 2</string>
+    <string name="note3">Заметка 3</string>
+    <string name="note4">Заметка 4</string>
+    <string name="note5">Заметка 5</string>
 
-    <string name="hello_blank_fragment">Hello blank fragment</string>
     <string name="first_fragment">First Fragment</string>
     <string name="second_fragment">Second Fragment</string>
     <string name="third_fragment">Third Fragment</string>
     <string name="fourth_fragment">Fourth Fragment</string>
+
+    <string name="description1">Купить молоко</string>
+    <string name="description2">Сходить в фитнес зал</string>
+    <string name="description3">Топ песен альтернативного рока</string>
+    <string name="description4">номер 1234513531 Дэн</string>
+    <string name="description5">Тимирязева 666</string>
 </resources>
