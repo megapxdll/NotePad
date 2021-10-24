@@ -6,6 +6,11 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:orientation="vertical">
 
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="1dp"
+        android:background="@android:color/black" />
+
     <TextView
         android:id="@+id/note_name"
         android:layout_width="wrap_content"
@@ -21,5 +26,10 @@
         android:layout_marginStart="@dimen/default_margin"
         android:textAppearance="@style/TextAppearance.MaterialComponents.Headline5"
         tools:text="@string/description2" />
+
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="1dp"
+        android:background="@android:color/black" />
 
 </LinearLayout>

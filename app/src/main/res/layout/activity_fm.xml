@@ -14,7 +14,22 @@
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintBottom_toTopOf="@id/bottom_container"
-        tools:context=".ui.fm.FmActivity" />
+        tools:context=".ui.fm.FmActivity" >
+
+    </androidx.fragment.app.FragmentContainerView>
+
+    <EditText
+        android:id="@+id/enter_note_edittext"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:inputType="text"
+        android:text="@string/enter_text"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintBottom_toTopOf="@id/bottom_container"
+        />
+
 
 
     <HorizontalScrollView
@@ -31,154 +46,10 @@
             android:layout_height="wrap_content">
 
             <Button
-                android:id="@+id/replace_first"
+                android:id="@+id/add_note_button"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="Replace First" />
-
-            <Button
-                android:id="@+id/replace_second"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="Replace Second" />
-
-            <Button
-                android:id="@+id/replace_third"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="Replace Third" />
-
-            <Button
-                android:id="@+id/add_first"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="Add First" />
-
-            <Button
-                android:id="@+id/add_second"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="Add Second" />
-
-            <Button
-                android:id="@+id/add_third"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="Add Third" />
-
-            <Button
-                android:id="@+id/add_fourth"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="Add Fourth" />
-
-            <Button
-                android:id="@+id/remove_first"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="Remove First" />
-
-            <Button
-                android:id="@+id/remove_second"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="Remove Second" />
-
-            <Button
-                android:id="@+id/remove_third"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="Remove Third" />
-
-            <Button
-                android:id="@+id/remove_fourth"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="Remove Fourth" />
-
-            <Button
-                android:id="@+id/show_first"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="Show First" />
-
-            <Button
-                android:id="@+id/show_second"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="Show Second" />
-
-            <Button
-                android:id="@+id/show_third"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="Show Third" />
-
-            <Button
-                android:id="@+id/show_fourth"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="Show Fourth" />
-
-            <Button
-                android:id="@+id/hide_first"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="Hide First" />
-
-            <Button
-                android:id="@+id/hide_second"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="Hide Second" />
-
-            <Button
-                android:id="@+id/hide_third"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="Hide Third" />
-
-            <Button
-                android:id="@+id/hide_fourth"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="Hide Fourth" />
-
-            <Button
-                android:id="@+id/multiple_add"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="Multiple Add" />
-
-            <Button
-                android:id="@+id/add_transaction_first"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="Add Transaction First" />
-
-            <Button
-                android:id="@+id/add_transaction_second"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="Add Transaction Second" />
-
-            <Button
-                android:id="@+id/add_transaction_third"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="Add Transaction Third" />
-
-            <Button
-                android:id="@+id/add_transaction_fourth"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="Add Transaction Fourth" />
-
-            <Button
-                android:id="@+id/go_first"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="Fo first" />
+                android:text="@string/Add" />
 
 
         </LinearLayout>
