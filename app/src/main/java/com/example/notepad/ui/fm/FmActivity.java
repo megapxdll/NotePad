@@ -43,9 +43,7 @@ public class FmActivity extends AppCompatActivity {
         findViewById(R.id.add_note_button).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if (findViewById(R.id.enter_note_edittext).equals(null)) {
-                    Toast.makeText(getApplicationContext(), "Enter some text!", Toast.LENGTH_SHORT).show();
-                }
+                findViewById(R.id.enter_note_edittext);
                 Toast.makeText(getApplicationContext(), "Note added", Toast.LENGTH_SHORT).show();
             }
         });

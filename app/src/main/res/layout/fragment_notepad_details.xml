@@ -21,5 +21,11 @@
         android:textAppearance="@style/TextAppearance.MaterialComponents.Headline5"
         tools:text="@string/description2" />
 
+    <Button
+        android:id="@+id/edit_text_button"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/Edit_text" />
+
 </LinearLayout>
 
