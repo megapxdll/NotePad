@@ -2,7 +2,6 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:gravity="center"
     android:padding="@dimen/default_margin"
     xmlns:tools="http://schemas.android.com/tools"
     android:orientation="vertical">
@@ -11,14 +10,22 @@
         android:id="@+id/note_name"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:textAppearance="@style/TextAppearance.MaterialComponents.Headline3"
+        android:textAppearance="@style/TextAppearance.MaterialComponents.Headline4"
+        android:layout_gravity="top"
         tools:text="@string/note2" />
 
     <TextView
         android:id="@+id/description"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:textAppearance="@style/TextAppearance.MaterialComponents.Headline3"
+        android:textAppearance="@style/TextAppearance.MaterialComponents.Headline5"
         tools:text="@string/description2" />
 
+    <Button
+        android:id="@+id/edit_text_button"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/Edit_text" />
+
 </LinearLayout>
+

@@ -1,6 +1,8 @@
 package com.example.notepad.ui.details;
 
 import android.os.Bundle;
+import android.view.View;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
@@ -32,6 +34,13 @@ public class NotePadDetailsActivity extends AppCompatActivity {
                     .replace(R.id.fragment_details_container, notePadDetailsFragment)
                     .commit();
         }
+
+        findViewById(R.id.edit_text_button).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Toast.makeText(getApplicationContext(), "text edit window opened", Toast.LENGTH_SHORT).show();
+            }
+        });
     }
 
     static class NotePadDetailsFragmentFactory extends FragmentFactory {
