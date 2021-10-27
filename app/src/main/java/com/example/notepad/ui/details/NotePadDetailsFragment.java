@@ -2,7 +2,9 @@ package com.example.notepad.ui.details;
 
 import android.os.Bundle;
 import android.view.View;
+import android.widget.Button;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -31,12 +33,15 @@ public class NotePadDetailsFragment extends Fragment {
 
         TextView description = view.findViewById(R.id.description);
         TextView name = view.findViewById(R.id.note_name);
+        Button edit_text = view.findViewById(R.id.edit_text_button);
 
         if (notePad != null) {
 
             description.setText(notePad.getDescription());
 
             name.setText(notePad.getName());
+
+            edit_text.setText(getResources().getString(R.string.Edit_text));
         }
 
         getParentFragmentManager().setFragmentResultListener(NotePadDetailsFragment.KEY_NOTES_LIST_DETAILS, getViewLifecycleOwner(), new FragmentResultListener() {
@@ -49,8 +54,15 @@ public class NotePadDetailsFragment extends Fragment {
 
                 name.setText(notePad1.getName());
 
+                edit_text.setText(getResources().getString(R.string.Edit_text));
             }
         });
 
+        edit_text.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Toast.makeText(getContext(), "new window opened", Toast.LENGTH_SHORT).show();
+            }
+        });
     }
 }
