@@ -34,13 +34,6 @@ public class NotePadDetailsActivity extends AppCompatActivity {
                     .replace(R.id.fragment_details_container, notePadDetailsFragment)
                     .commit();
         }
-
-        findViewById(R.id.edit_text_button).setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Toast.makeText(getApplicationContext(), "text edit window opened", Toast.LENGTH_SHORT).show();
-            }
-        });
     }
 
     static class NotePadDetailsFragmentFactory extends FragmentFactory {
