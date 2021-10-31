@@ -1,7 +1,9 @@
 package com.example.notepad.ui;
 
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
+import android.view.Gravity;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -9,8 +11,10 @@ import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.ActionBarDrawerToggle;
+import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
+import androidx.core.view.GravityCompat;
 import androidx.drawerlayout.widget.DrawerLayout;
 import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentResultListener;
@@ -21,6 +25,7 @@ import com.example.notepad.ui.details.NotePadDetailsActivity;
 import com.example.notepad.ui.details.NotePadDetailsFragment;
 import com.example.notepad.ui.fm.FmActivity;
 import com.example.notepad.ui.list.NotePadListFragment;
+import com.example.notepad.ui.menu.NavMenuActivity;
 import com.google.android.material.navigation.NavigationView;
 
 public class MainActivity extends AppCompatActivity {
@@ -28,10 +33,16 @@ public class MainActivity extends AppCompatActivity {
 
     private NotePad selectedNotePad;
 
+    private DrawerLayout navigation_menu;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+
+
+        initToolbarAndDrawer();
+
 
         findViewById(R.id.fm_options).setOnClickListener(new View.OnClickListener() {
             @Override
@@ -40,8 +51,6 @@ public class MainActivity extends AppCompatActivity {
                 startActivity(intent);
             }
         });
-
-        initToolbarAndDrawer();
 
         FragmentManager fragmentManager = getSupportFragmentManager();
 
@@ -86,6 +95,7 @@ public class MainActivity extends AppCompatActivity {
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         getMenuInflater().inflate(R.menu.toolbar_menu, menu);
+        getMenuInflater().inflate(R.menu.navigation_menu, menu);
         return super.onCreateOptionsMenu(menu);
     }
 
@@ -99,6 +109,13 @@ public class MainActivity extends AppCompatActivity {
             case R.id.action_sort:
                 Toast.makeText(getApplicationContext(), "Sorting", Toast.LENGTH_SHORT).show();
                 return true;
+            case R.id.action_drawer_about:
+                showAboutAlertDialog();
+                return true;
+            case R.id.action_drawer_exit:
+                showExitAlertDialog();
+                return true;
+
         }
 
         return super.onOptionsItemSelected(item);
@@ -112,20 +129,21 @@ public class MainActivity extends AppCompatActivity {
         super.onSaveInstanceState(outState);
     }
 
+
     private void initToolbarAndDrawer() {
-        Toolbar toolbar = findViewById(R.id.toolbar);
+        Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
-        initDrawer(toolbar);
     }
+
 
     private void initDrawer(Toolbar toolbar) {
 
-        final DrawerLayout drawer = findViewById(R.id.navigation_menu);
+        navigation_menu = (DrawerLayout) findViewById(R.id.navigation_menu);
         ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(
-                this, drawer, toolbar,
+                this, navigation_menu, toolbar,
                 R.string.navigation_drawer_open,
                 R.string.navigation_drawer_close);
-        drawer.addDrawerListener(toggle);
+        navigation_menu.addDrawerListener(toggle);
         toggle.syncState();
 
         // Обработка навигационного меню
@@ -145,5 +163,41 @@ public class MainActivity extends AppCompatActivity {
                 return false;
             }
         });
+    }
+
+    private void showAboutAlertDialog() {
+        new AlertDialog.Builder(this)
+                .setTitle("About: ")
+                .setMessage("This program is designed by harCode Std. Main idea of our project was to understand basics of Java Android app programming. ")
+                // Можно указать и пиктограмму
+                //.setIcon(R.mipmap.ic_launcher_round)
+                // Из этого окна нельзя выйти кнопкой Back
+                //.setCancelable(false)
+                .setNeutralButton("Back", null)
+                .show();
+    }
+
+    private void showExitAlertDialog() {
+        new AlertDialog.Builder(this)
+                .setTitle("Warning!")
+                .setMessage("Do you really want to exit?")
+                // Можно указать и пиктограмму
+                //.setIcon(R.mipmap.ic_launcher_round)
+                // Из этого окна нельзя выйти кнопкой Back
+                //.setCancelable(false)
+                .setPositiveButton("Yes", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialogInterface, int i) {
+                        Toast.makeText(MainActivity.this, "Yes!", Toast.LENGTH_SHORT).show();
+                    }
+                })
+                .setNegativeButton("No", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialogInterface, int i) {
+                        Toast.makeText(MainActivity.this, "No!", Toast.LENGTH_SHORT).show();
+                    }
+                })
+                .setNeutralButton("Cancel", null)
+                .show();
     }
 }
