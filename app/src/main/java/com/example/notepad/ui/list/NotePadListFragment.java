@@ -1,21 +1,18 @@
 package com.example.notepad.ui.list;
 
+import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
-import android.view.LayoutInflater;
 import android.view.View;
-import android.view.ViewGroup;
-import android.widget.Button;
 import android.widget.LinearLayout;
-import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
-import androidx.core.content.ContextCompat;
 import androidx.fragment.app.Fragment;
-import androidx.legacy.widget.Space;
-import androidx.recyclerview.widget.DividerItemDecoration;
+import androidx.fragment.app.FragmentActivity;
+import androidx.fragment.app.FragmentManager;
+import androidx.fragment.app.FragmentResultListener;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
@@ -23,8 +20,15 @@ import com.example.notepad.R;
 import com.example.notepad.domain.NotePad;
 import com.example.notepad.domain.InMemoryNotePadRepository;
 import com.example.notepad.ui.MainActivity;
+import com.example.notepad.ui.details.NotePadDetailsActivity;
+import com.example.notepad.ui.details.NotePadDetailsFragment;
 import com.example.notepad.ui.fm.FmActivity;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
+
+import android.view.Menu;
+import android.view.MenuItem;
+import android.view.MenuInflater;
+import android.widget.Toolbar;
 
 import java.util.List;
 
@@ -32,6 +36,9 @@ public class NotePadListFragment extends Fragment implements NotePadListView {
 
     public static final String KEY_NOTES_LIST_ACTIVITY = "KEY_NOTES_LIST_ACTIVITY";
     public static final String ARG_NOTE = "ARG_NOTE";
+
+    private FragmentActivity fragmentActivity;
+    private NotePad selectedNotePad;
 
     private LinearLayout notepadListRoot;
 
@@ -47,6 +54,7 @@ public class NotePadListFragment extends Fragment implements NotePadListView {
 
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
+        setHasOptionsMenu(true);
         super.onCreate(savedInstanceState);
 
         presenter = new NotePadListPresenter(this, new InMemoryNotePadRepository());
@@ -56,6 +64,45 @@ public class NotePadListFragment extends Fragment implements NotePadListView {
             @Override
             public void onNoteClicked(NotePad note) {
                 Toast.makeText(requireContext(), note.getName(), Toast.LENGTH_SHORT).show();
+            }
+        });
+
+        FragmentManager fragmentManager = fragmentActivity.getSupportFragmentManager();
+
+        if (!(fragmentManager.findFragmentById(R.id.fragment_container) instanceof NotePadListFragment)) {
+            fragmentManager.popBackStack();
+        }
+
+        boolean isLandscape = getResources().getBoolean(R.bool.is_landscape);
+
+        if (savedInstanceState != null && savedInstanceState.containsKey(ARG_NOTE)) {
+            selectedNotePad = savedInstanceState.getParcelable(ARG_NOTE);
+
+            if (isLandscape) {
+                Bundle bundle = new Bundle();
+                bundle.putParcelable(ARG_NOTE, selectedNotePad);
+
+                fragmentManager.setFragmentResult(NotePadDetailsFragment.KEY_NOTES_LIST_DETAILS, bundle);
+            } else {
+            }
+        }
+
+        fragmentActivity.getSupportFragmentManager().setFragmentResultListener(NotePadListFragment.KEY_NOTES_LIST_ACTIVITY, this, new FragmentResultListener() {
+            @Override
+            public void onFragmentResult(@NonNull String requestKey, @NonNull Bundle result) {
+
+                selectedNotePad = result.getParcelable(NotePadListFragment.ARG_NOTE);
+
+                if (isLandscape) {
+
+                    fragmentManager.setFragmentResult(NotePadDetailsFragment.KEY_NOTES_LIST_DETAILS, result);
+                } else {
+
+                    Intent intent = new Intent(getActivity(), NotePadDetailsActivity.class);
+                    intent.putExtra(NotePadDetailsFragment.ARG_NOTE, selectedNotePad);
+
+                    startActivity(intent);
+                }
             }
         });
     }
@@ -94,6 +141,46 @@ public class NotePadListFragment extends Fragment implements NotePadListView {
         presenter.requestNotePad();
     }
 
+    @Override
+    public void onAttach(Activity activity) {
+        fragmentActivity =(FragmentActivity) activity;
+        super.onAttach(activity);
+    }
+
+    @Override
+    public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
+        super.onCreateOptionsMenu(menu, inflater);
+        getActivity().getMenuInflater().inflate(R.menu.toolbar_menu, menu);
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(@NonNull MenuItem item) {
+        int id = item.getItemId();
+        switch (id) {
+            case R.id.action_search:
+                Toast.makeText(getActivity().getApplicationContext(), "Searching", Toast.LENGTH_SHORT).show();
+                return true;
+            case R.id.action_sort:
+                Toast.makeText(getActivity().getApplicationContext(), "Sorting", Toast.LENGTH_SHORT).show();
+                return true;
+            case R.id.action_drawer_about:
+                Toast.makeText(getActivity().getApplicationContext(), "About window opened", Toast.LENGTH_SHORT).show();
+                return true;
+            case R.id.action_drawer_exit:
+                Toast.makeText(getActivity().getApplicationContext(), "Settings window opened", Toast.LENGTH_SHORT).show();
+                return true;
+        }
+
+        return super.onOptionsItemSelected(item);
+    }
+
+    @Override
+    public void onSaveInstanceState(@NonNull Bundle outState) {
+        if (selectedNotePad != null) {
+            outState.putParcelable(ARG_NOTE, selectedNotePad);
+        }
+        super.onSaveInstanceState(outState);
+    }
 
     @Override
     public void showNotePad(List<NotePad> notes) {
