@@ -33,14 +33,6 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        findViewById(R.id.fm_options).setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Intent intent = new Intent(MainActivity.this, FmActivity.class);
-                startActivity(intent);
-            }
-        });
-
         initToolbarAndDrawer();
 
         FragmentManager fragmentManager = getSupportFragmentManager();
@@ -86,6 +78,7 @@ public class MainActivity extends AppCompatActivity {
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         getMenuInflater().inflate(R.menu.toolbar_menu, menu);
+        getMenuInflater().inflate(R.menu.navigation_menu, menu);
         return super.onCreateOptionsMenu(menu);
     }
 
@@ -98,6 +91,12 @@ public class MainActivity extends AppCompatActivity {
                 return true;
             case R.id.action_sort:
                 Toast.makeText(getApplicationContext(), "Sorting", Toast.LENGTH_SHORT).show();
+                return true;
+            case R.id.action_drawer_about:
+                Toast.makeText(getApplicationContext(), "About window opened", Toast.LENGTH_SHORT).show();
+                return true;
+            case R.id.action_drawer_exit:
+                Toast.makeText(getApplicationContext(), "Settings window opened", Toast.LENGTH_SHORT).show();
                 return true;
         }
 
@@ -115,7 +114,6 @@ public class MainActivity extends AppCompatActivity {
     private void initToolbarAndDrawer() {
         Toolbar toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
-        initDrawer(toolbar);
     }
 
     private void initDrawer(Toolbar toolbar) {
