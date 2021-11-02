@@ -9,6 +9,8 @@ import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.appcompat.app.AppCompatActivity;
+import androidx.appcompat.widget.Toolbar;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentActivity;
 import androidx.fragment.app.FragmentManager;
@@ -28,7 +30,6 @@ import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.MenuInflater;
-import android.widget.Toolbar;
 
 import java.util.List;
 
@@ -39,6 +40,7 @@ public class NotePadListFragment extends Fragment implements NotePadListView {
 
     private FragmentActivity fragmentActivity;
     private NotePad selectedNotePad;
+    private Toolbar toolbar;
 
     private LinearLayout notepadListRoot;
 
@@ -59,6 +61,8 @@ public class NotePadListFragment extends Fragment implements NotePadListView {
 
         presenter = new NotePadListPresenter(this, new InMemoryNotePadRepository());
         adapter = new NotePadAdapter();
+
+        initToolbarAndDrawer();
 
         adapter.setNoteClicked(new NotePadAdapter.OnNoteClicked() {
             @Override
@@ -172,6 +176,11 @@ public class NotePadListFragment extends Fragment implements NotePadListView {
         }
 
         return super.onOptionsItemSelected(item);
+    }
+
+    private void initToolbarAndDrawer() {
+        toolbar = (Toolbar) getActivity().findViewById(R.id.toolbar);
+        ((AppCompatActivity)getActivity()).setSupportActionBar(toolbar);
     }
 
     @Override

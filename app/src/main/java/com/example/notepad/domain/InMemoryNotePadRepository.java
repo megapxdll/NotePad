@@ -29,6 +29,10 @@ public class InMemoryNotePadRepository implements NotePadRepository {
         result.add(new NotePad(R.string.note3, R.string.description3));
         result.add(new NotePad(R.string.note4, R.string.description4));
         result.add(new NotePad(R.string.note5, R.string.description5));
+
+        for (int i = 0; i < 100; i++) {
+            result.add(new NotePad(R.string.note5, R.string.description5));
+        }
         return result;
     }
 }
