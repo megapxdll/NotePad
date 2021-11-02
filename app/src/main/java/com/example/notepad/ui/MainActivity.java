@@ -167,37 +167,37 @@ public class MainActivity extends AppCompatActivity {
 
     private void showAboutAlertDialog() {
         new AlertDialog.Builder(this)
-                .setTitle("About: ")
-                .setMessage("This program is designed by harCode Std. Main idea of our project was to understand basics of Java Android app programming. ")
+                .setTitle(getResources().getString(R.string.about_title))
+                .setMessage(getResources().getString(R.string.about_description))
                 // Можно указать и пиктограмму
                 //.setIcon(R.mipmap.ic_launcher_round)
                 // Из этого окна нельзя выйти кнопкой Back
                 //.setCancelable(false)
-                .setNeutralButton("Back", null)
+                .setNeutralButton(getResources().getString(R.string.back_button), null)
                 .show();
     }
 
     private void showExitAlertDialog() {
         new AlertDialog.Builder(this)
-                .setTitle("Warning!")
-                .setMessage("Do you really want to exit?")
+                .setTitle(getResources().getString(R.string.exit_title))
+                .setMessage(getResources().getString(R.string.exit_description))
                 // Можно указать и пиктограмму
                 //.setIcon(R.mipmap.ic_launcher_round)
                 // Из этого окна нельзя выйти кнопкой Back
                 //.setCancelable(false)
-                .setPositiveButton("Yes", new DialogInterface.OnClickListener() {
+                .setPositiveButton(getResources().getString(R.string.yes_button), new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialogInterface, int i) {
                         Toast.makeText(MainActivity.this, "Yes!", Toast.LENGTH_SHORT).show();
                     }
                 })
-                .setNegativeButton("No", new DialogInterface.OnClickListener() {
+                .setNegativeButton(getResources().getString(R.string.no_button), new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialogInterface, int i) {
                         Toast.makeText(MainActivity.this, "No!", Toast.LENGTH_SHORT).show();
                     }
                 })
-                .setNeutralButton("Cancel", null)
+                .setNeutralButton(getResources().getString(R.string.cancel_button), null)
                 .show();
     }
 }
