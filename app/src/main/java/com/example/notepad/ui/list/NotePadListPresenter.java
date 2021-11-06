@@ -1,5 +1,6 @@
 package com.example.notepad.ui.list;
 
+import com.example.notepad.domain.NotePad;
 import com.example.notepad.domain.NotePadRepository;
 
 public class NotePadListPresenter {
@@ -11,6 +12,10 @@ public class NotePadListPresenter {
     public NotePadListPresenter(NotePadListView view, NotePadRepository repository) {
         this.view = view;
         this.repository = repository;
+    }
+
+    public void clear(NotePad selectedNote) {
+
     }
 
     public void requestNotePad() {
