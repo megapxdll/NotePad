@@ -6,6 +6,7 @@ import android.os.Bundle;
 import android.view.Gravity;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.MenuInflater;
 import android.view.View;
 import android.widget.Toast;
 
@@ -40,7 +41,6 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-
         initToolbarAndDrawer();
 
 
@@ -51,7 +51,7 @@ public class MainActivity extends AppCompatActivity {
                 startActivity(intent);
             }
         });
-
+      
         FragmentManager fragmentManager = getSupportFragmentManager();
 
         if (!(fragmentManager.findFragmentById(R.id.fragment_container) instanceof NotePadListFragment)) {
@@ -115,7 +115,6 @@ public class MainActivity extends AppCompatActivity {
             case R.id.action_drawer_exit:
                 showExitAlertDialog();
                 return true;
-
         }
 
         return super.onOptionsItemSelected(item);
