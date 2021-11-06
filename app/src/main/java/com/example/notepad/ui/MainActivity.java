@@ -1,7 +1,9 @@
 package com.example.notepad.ui;
 
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
+import android.view.Gravity;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.MenuInflater;
@@ -10,8 +12,10 @@ import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.ActionBarDrawerToggle;
+import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
+import androidx.core.view.GravityCompat;
 import androidx.drawerlayout.widget.DrawerLayout;
 import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentResultListener;
@@ -22,12 +26,15 @@ import com.example.notepad.ui.details.NotePadDetailsActivity;
 import com.example.notepad.ui.details.NotePadDetailsFragment;
 import com.example.notepad.ui.fm.FmActivity;
 import com.example.notepad.ui.list.NotePadListFragment;
+import com.example.notepad.ui.menu.NavMenuActivity;
 import com.google.android.material.navigation.NavigationView;
 
 public class MainActivity extends AppCompatActivity {
     private static final String ARG_NOTE = "ARG_NOTE";
 
     private NotePad selectedNotePad;
+
+    private DrawerLayout navigation_menu;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -36,6 +43,15 @@ public class MainActivity extends AppCompatActivity {
 
         initToolbarAndDrawer();
 
+
+        findViewById(R.id.fm_options).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(MainActivity.this, FmActivity.class);
+                startActivity(intent);
+            }
+        });
+      
         FragmentManager fragmentManager = getSupportFragmentManager();
 
         if (!(fragmentManager.findFragmentById(R.id.fragment_container) instanceof NotePadListFragment)) {
@@ -94,10 +110,10 @@ public class MainActivity extends AppCompatActivity {
                 Toast.makeText(getApplicationContext(), "Sorting", Toast.LENGTH_SHORT).show();
                 return true;
             case R.id.action_drawer_about:
-                Toast.makeText(getApplicationContext(), "About window opened", Toast.LENGTH_SHORT).show();
+                showAboutAlertDialog();
                 return true;
             case R.id.action_drawer_exit:
-                Toast.makeText(getApplicationContext(), "Settings window opened", Toast.LENGTH_SHORT).show();
+                showExitAlertDialog();
                 return true;
         }
 
@@ -112,19 +128,21 @@ public class MainActivity extends AppCompatActivity {
         super.onSaveInstanceState(outState);
     }
 
+
     private void initToolbarAndDrawer() {
-        Toolbar toolbar = findViewById(R.id.toolbar);
+        Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
     }
 
+
     private void initDrawer(Toolbar toolbar) {
 
-        final DrawerLayout drawer = findViewById(R.id.navigation_menu);
+        navigation_menu = (DrawerLayout) findViewById(R.id.navigation_menu);
         ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(
-                this, drawer, toolbar,
+                this, navigation_menu, toolbar,
                 R.string.navigation_drawer_open,
                 R.string.navigation_drawer_close);
-        drawer.addDrawerListener(toggle);
+        navigation_menu.addDrawerListener(toggle);
         toggle.syncState();
 
         // Обработка навигационного меню
@@ -144,5 +162,41 @@ public class MainActivity extends AppCompatActivity {
                 return false;
             }
         });
+    }
+
+    private void showAboutAlertDialog() {
+        new AlertDialog.Builder(this)
+                .setTitle(getResources().getString(R.string.about_title))
+                .setMessage(getResources().getString(R.string.about_description))
+                // Можно указать и пиктограмму
+                //.setIcon(R.mipmap.ic_launcher_round)
+                // Из этого окна нельзя выйти кнопкой Back
+                //.setCancelable(false)
+                .setNeutralButton(getResources().getString(R.string.back_button), null)
+                .show();
+    }
+
+    private void showExitAlertDialog() {
+        new AlertDialog.Builder(this)
+                .setTitle(getResources().getString(R.string.exit_title))
+                .setMessage(getResources().getString(R.string.exit_description))
+                // Можно указать и пиктограмму
+                //.setIcon(R.mipmap.ic_launcher_round)
+                // Из этого окна нельзя выйти кнопкой Back
+                //.setCancelable(false)
+                .setPositiveButton(getResources().getString(R.string.yes_button), new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialogInterface, int i) {
+                        Toast.makeText(MainActivity.this, "Yes!", Toast.LENGTH_SHORT).show();
+                    }
+                })
+                .setNegativeButton(getResources().getString(R.string.no_button), new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialogInterface, int i) {
+                        Toast.makeText(MainActivity.this, "No!", Toast.LENGTH_SHORT).show();
+                    }
+                })
+                .setNeutralButton(getResources().getString(R.string.cancel_button), null)
+                .show();
     }
 }
