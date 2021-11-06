@@ -43,7 +43,6 @@ public class MainActivity extends AppCompatActivity {
 
         initToolbarAndDrawer();
 
-
         findViewById(R.id.fm_options).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -51,7 +50,7 @@ public class MainActivity extends AppCompatActivity {
                 startActivity(intent);
             }
         });
-      
+
         FragmentManager fragmentManager = getSupportFragmentManager();
 
         if (!(fragmentManager.findFragmentById(R.id.fragment_container) instanceof NotePadListFragment)) {

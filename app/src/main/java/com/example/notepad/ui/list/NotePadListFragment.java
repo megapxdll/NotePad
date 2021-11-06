@@ -40,13 +40,11 @@ public class NotePadListFragment extends Fragment implements NotePadListView {
 
     private FragmentActivity fragmentActivity;
     private NotePad selectedNotePad;
-    private Toolbar toolbar;
 
     private LinearLayout notepadListRoot;
 
     private NotePadAdapter adapter;
     private NotePadListPresenter presenter;
-    private FloatingActionButton fm_options_view;
 
 
     public NotePadListFragment() {
@@ -56,13 +54,12 @@ public class NotePadListFragment extends Fragment implements NotePadListView {
 
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
-        setHasOptionsMenu(true);
         super.onCreate(savedInstanceState);
 
         presenter = new NotePadListPresenter(this, new InMemoryNotePadRepository());
         adapter = new NotePadAdapter();
 
-        initToolbarAndDrawer();
+
 
         adapter.setNoteClicked(new NotePadAdapter.OnNoteClicked() {
             @Override
@@ -71,44 +68,6 @@ public class NotePadListFragment extends Fragment implements NotePadListView {
             }
         });
 
-        FragmentManager fragmentManager = fragmentActivity.getSupportFragmentManager();
-
-        if (!(fragmentManager.findFragmentById(R.id.fragment_container) instanceof NotePadListFragment)) {
-            fragmentManager.popBackStack();
-        }
-
-        boolean isLandscape = getResources().getBoolean(R.bool.is_landscape);
-
-        if (savedInstanceState != null && savedInstanceState.containsKey(ARG_NOTE)) {
-            selectedNotePad = savedInstanceState.getParcelable(ARG_NOTE);
-
-            if (isLandscape) {
-                Bundle bundle = new Bundle();
-                bundle.putParcelable(ARG_NOTE, selectedNotePad);
-
-                fragmentManager.setFragmentResult(NotePadDetailsFragment.KEY_NOTES_LIST_DETAILS, bundle);
-            } else {
-            }
-        }
-
-        fragmentActivity.getSupportFragmentManager().setFragmentResultListener(NotePadListFragment.KEY_NOTES_LIST_ACTIVITY, this, new FragmentResultListener() {
-            @Override
-            public void onFragmentResult(@NonNull String requestKey, @NonNull Bundle result) {
-
-                selectedNotePad = result.getParcelable(NotePadListFragment.ARG_NOTE);
-
-                if (isLandscape) {
-
-                    fragmentManager.setFragmentResult(NotePadDetailsFragment.KEY_NOTES_LIST_DETAILS, result);
-                } else {
-
-                    Intent intent = new Intent(getActivity(), NotePadDetailsActivity.class);
-                    intent.putExtra(NotePadDetailsFragment.ARG_NOTE, selectedNotePad);
-
-                    startActivity(intent);
-                }
-            }
-        });
     }
 /**
     @Nullable
@@ -120,16 +79,9 @@ public class NotePadListFragment extends Fragment implements NotePadListView {
 
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
+        setHasOptionsMenu(true);
         super.onViewCreated(view, savedInstanceState);
 
-        fm_options_view = (FloatingActionButton) view.findViewById(R.id.fm_options);
-
-        fm_options_view.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Intent intent = new Intent(getActivity(), FmActivity.class);
-            }
-        });
 
         notepadListRoot = view.findViewById(R.id.notepad_root);
 
@@ -143,44 +95,6 @@ public class NotePadListFragment extends Fragment implements NotePadListView {
         notesList.setAdapter(adapter);
 
         presenter.requestNotePad();
-    }
-
-    @Override
-    public void onAttach(Activity activity) {
-        fragmentActivity =(FragmentActivity) activity;
-        super.onAttach(activity);
-    }
-
-    @Override
-    public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
-        super.onCreateOptionsMenu(menu, inflater);
-        getActivity().getMenuInflater().inflate(R.menu.toolbar_menu, menu);
-    }
-
-    @Override
-    public boolean onOptionsItemSelected(@NonNull MenuItem item) {
-        int id = item.getItemId();
-        switch (id) {
-            case R.id.action_search:
-                Toast.makeText(getActivity().getApplicationContext(), "Searching", Toast.LENGTH_SHORT).show();
-                return true;
-            case R.id.action_sort:
-                Toast.makeText(getActivity().getApplicationContext(), "Sorting", Toast.LENGTH_SHORT).show();
-                return true;
-            case R.id.action_drawer_about:
-                Toast.makeText(getActivity().getApplicationContext(), "About window opened", Toast.LENGTH_SHORT).show();
-                return true;
-            case R.id.action_drawer_exit:
-                Toast.makeText(getActivity().getApplicationContext(), "Settings window opened", Toast.LENGTH_SHORT).show();
-                return true;
-        }
-
-        return super.onOptionsItemSelected(item);
-    }
-
-    private void initToolbarAndDrawer() {
-        toolbar = (Toolbar) getActivity().findViewById(R.id.toolbar);
-        ((AppCompatActivity)getActivity()).setSupportActionBar(toolbar);
     }
 
     @Override
