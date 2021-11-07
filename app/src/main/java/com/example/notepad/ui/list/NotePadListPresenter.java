@@ -8,6 +8,7 @@ public class NotePadListPresenter {
     private final NotePadListView view;
 
     private final NotePadRepository repository;
+    private NotePad result;
 
     public NotePadListPresenter(NotePadListView view, NotePadRepository repository) {
         this.view = view;
@@ -20,5 +21,10 @@ public class NotePadListPresenter {
 
     public void requestNotePad() {
         view.showNotePad(repository.getNotes());
+    }
+
+    public void add(String newNote, String enterText) {
+        repository.add(newNote, enterText);
+        view.addNotePad(repository.getNotes().get(3)); //Test
     }
 }

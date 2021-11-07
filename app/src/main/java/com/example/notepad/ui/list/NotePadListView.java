@@ -7,4 +7,6 @@ import java.util.List;
 public interface NotePadListView {
 
     void showNotePad(List<NotePad> notes);
+
+    void addNotePad(NotePad notePad);
 }

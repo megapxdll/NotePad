@@ -6,5 +6,9 @@ public interface NotePadRepository {
 
     List<NotePad> getNotes();
 
+    void add(String title, String message);
+
     void delete(NotePad note);
+
+    void clear();
 }
