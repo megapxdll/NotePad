@@ -35,4 +35,6 @@
     <string name="yes_button">Yes</string>
     <string name="no_button">No</string>
     <string name="cancel_button">Cancel</string>
+    <string name="button_clear">Clear</string>
+    <string name="button_edit">Edit</string>
 </resources>

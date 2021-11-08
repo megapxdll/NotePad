@@ -6,6 +6,7 @@ import android.view.ViewGroup;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
+import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.notepad.R;
@@ -15,6 +16,15 @@ import java.util.ArrayList;
 import java.util.Collection;
 
 public class NotePadAdapter extends RecyclerView.Adapter<NotePadAdapter.NotePadViewHolder> {
+
+    private Fragment fragment;
+
+    public NotePadAdapter(Fragment fragment) {
+        this.fragment = fragment;
+    }
+    public void addNotePad(NotePad result) {
+        notes.add(result);
+    }
 
     interface OnNoteClicked {
         void onNoteClicked(NotePad note);
@@ -75,12 +85,22 @@ public class NotePadAdapter extends RecyclerView.Adapter<NotePadAdapter.NotePadV
         public NotePadViewHolder(@NonNull View itemView) {
             super(itemView);
 
+            fragment.registerForContextMenu(itemView);
+
             itemView.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
                     if (getNoteClicked() != null) {
                         getNoteClicked().onNoteClicked(notes.get(getAdapterPosition()));
                     }
+                }
+            });
+
+            itemView.setOnLongClickListener(new View.OnLongClickListener() {
+                @Override
+                public boolean onLongClick(View v) {
+                    itemView.showContextMenu();
+                    return true;
                 }
             });
 

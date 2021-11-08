@@ -27,6 +27,7 @@ import com.example.notepad.ui.details.NotePadDetailsFragment;
 import com.example.notepad.ui.fm.FmActivity;
 import com.example.notepad.ui.list.NotePadListFragment;
 import com.example.notepad.ui.menu.NavMenuActivity;
+import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.android.material.navigation.NavigationView;
 
 public class MainActivity extends AppCompatActivity {
@@ -36,6 +37,8 @@ public class MainActivity extends AppCompatActivity {
 
     private DrawerLayout navigation_menu;
 
+    private FloatingActionButton fmoptions;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -43,13 +46,6 @@ public class MainActivity extends AppCompatActivity {
 
         initToolbarAndDrawer();
 
-        findViewById(R.id.fm_options).setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Intent intent = new Intent(MainActivity.this, FmActivity.class);
-                startActivity(intent);
-            }
-        });
 
         FragmentManager fragmentManager = getSupportFragmentManager();
 

@@ -1,20 +1,16 @@
 package com.example.notepad.ui.list;
 
-import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
+import android.view.ContextMenu;
 import android.view.View;
 import android.widget.LinearLayout;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
-import androidx.appcompat.app.AppCompatActivity;
-import androidx.appcompat.widget.Toolbar;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentActivity;
-import androidx.fragment.app.FragmentManager;
-import androidx.fragment.app.FragmentResultListener;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
@@ -22,14 +18,10 @@ import com.example.notepad.R;
 import com.example.notepad.domain.NotePad;
 import com.example.notepad.domain.InMemoryNotePadRepository;
 import com.example.notepad.ui.MainActivity;
-import com.example.notepad.ui.details.NotePadDetailsActivity;
-import com.example.notepad.ui.details.NotePadDetailsFragment;
 import com.example.notepad.ui.fm.FmActivity;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 
-import android.view.Menu;
 import android.view.MenuItem;
-import android.view.MenuInflater;
 
 import java.util.List;
 
@@ -46,6 +38,8 @@ public class NotePadListFragment extends Fragment implements NotePadListView {
     private NotePadAdapter adapter;
     private NotePadListPresenter presenter;
 
+    private FloatingActionButton fmoptions;
+
 
     public NotePadListFragment() {
         super(R.layout.fragment_notepad_list);
@@ -57,14 +51,18 @@ public class NotePadListFragment extends Fragment implements NotePadListView {
         super.onCreate(savedInstanceState);
 
         presenter = new NotePadListPresenter(this, new InMemoryNotePadRepository());
-        adapter = new NotePadAdapter();
+        adapter = new NotePadAdapter(this);
 
 
 
         adapter.setNoteClicked(new NotePadAdapter.OnNoteClicked() {
             @Override
             public void onNoteClicked(NotePad note) {
-                Toast.makeText(requireContext(), note.getName(), Toast.LENGTH_SHORT).show();
+                Bundle bundle = new Bundle();
+                bundle.putParcelable(ARG_NOTE, note);
+
+                getParentFragmentManager()
+                        .setFragmentResult(KEY_NOTES_LIST_ACTIVITY, bundle);
             }
         });
 
@@ -86,6 +84,16 @@ public class NotePadListFragment extends Fragment implements NotePadListView {
         notepadListRoot = view.findViewById(R.id.notepad_root);
 
         RecyclerView notesList = view.findViewById(R.id.notes_list);
+
+        fmoptions = view.findViewById(R.id.fm_options);
+        fmoptions.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                presenter.add("new note", "enter text");
+                //Intent intent = new Intent(getActivity(), FmActivity.class);
+                //startActivity(intent);
+            }
+        });
 
         RecyclerView.LayoutManager lm = new LinearLayoutManager(requireContext(), LinearLayoutManager.VERTICAL, false);
         //RecyclerView.LayoutManager lm = new GridLayoutManager(requireContext(), 2);
@@ -135,5 +143,32 @@ public class NotePadListFragment extends Fragment implements NotePadListView {
             notepadListRoot.addView(itemView);
         }
          */
+    }
+
+    @Override
+    public void addNotePad(NotePad result) {
+        adapter.addNotePad(result);
+        adapter.notifyItemInserted(adapter.getItemCount() - 1);
+    }
+
+    @Override
+    public void onCreateContextMenu(@NonNull ContextMenu menu, @NonNull View v, @Nullable ContextMenu.ContextMenuInfo menuInfo) {
+        super.onCreateContextMenu(menu, v, menuInfo);
+
+        requireActivity().getMenuInflater().inflate(R.menu.context_menu, menu);
+    }
+
+    @Override
+    public boolean onContextItemSelected(@NonNull MenuItem item) {
+        if (item.getItemId() == R.id.action_clear) {
+            presenter.clear(selectedNotePad);
+            return true;
+        }
+
+        if (item.getItemId() == R.id.action_edit) {
+            return true;
+        }
+
+        return super.onContextItemSelected(item);
     }
 }
