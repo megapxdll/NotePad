@@ -2,6 +2,7 @@ package com.example.notepad.domain;
 
 import android.os.Handler;
 import android.os.Looper;
+import android.provider.ContactsContract;
 import android.widget.Toast;
 
 import com.example.notepad.R;
@@ -37,9 +38,19 @@ public class InMemoryNotePadRepository implements NotePadRepository {
     }
 
     @Override
-    public void add(String title, String message) {
-        NotePad notePad = new NotePad(R.string.note1, R.string.description1);
+    public void add(String title, String message, Callback<NotePad> callback) {
+        NotePad notePad = new NotePad(R.string.new_note, R.string.description);
+
+        result.add(notePad);
+
+        mainThreadHandler.post(new Runnable() {
+            @Override
+            public void run() {
+                callback.onSuccess(notePad);
+            }
+        });
     }
+
 
     @Override
     public void delete(NotePad note) {

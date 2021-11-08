@@ -7,7 +7,6 @@ import androidx.annotation.StringRes;
 
 public class NotePad implements Parcelable {
 
-    @StringRes
     private final int name;
 
     private final int description;
