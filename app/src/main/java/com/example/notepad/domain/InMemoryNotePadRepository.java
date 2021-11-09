@@ -2,6 +2,7 @@ package com.example.notepad.domain;
 
 import android.os.Handler;
 import android.os.Looper;
+import android.provider.ContactsContract;
 import android.widget.Toast;
 
 import com.example.notepad.R;
@@ -20,6 +21,7 @@ public class InMemoryNotePadRepository implements NotePadRepository {
     private final Handler mainThreadHandler = new Handler(Looper.getMainLooper());
 
     private final List<NotePad> result = new ArrayList<>();
+
     @Override
     public List<NotePad> getNotes() {
         executor.execute(new Runnable() {
@@ -37,29 +39,66 @@ public class InMemoryNotePadRepository implements NotePadRepository {
     }
 
     @Override
-    public void add(String title, String message) {
-        NotePad notePad = new NotePad(R.string.note1, R.string.description1);
-    }
+    public void add(String title, String message, Callback<NotePad> callback) {
+        NotePad notePad = new NotePad(R.string.new_note, R.string.description);
 
-    @Override
-    public void delete(NotePad note) {
-
-    }
-
-    @Override
-    public void clear() {
-        result.clear();
+        result.add(notePad);
 
         mainThreadHandler.post(new Runnable() {
             @Override
             public void run() {
-                if (new Random().nextBoolean()) {
-
-                }
-                else {
-
-                }
+                callback.onSuccess(notePad);
             }
         });
+    }
+
+
+    @Override
+    public void delete(NotePad note, Callback<Void> callback) {
+
+        executor.execute(new Runnable() {
+            @Override
+            public void run() {
+                try {
+                    Thread.sleep(400L);
+                } catch (InterruptedException e) {
+                    e.printStackTrace();
+                }
+
+                result.remove(note);
+
+                mainThreadHandler.post(new Runnable() {
+                    @Override
+                    public void run() {
+                        callback.onSuccess(null);
+                    }
+                });
+            }
+        });
+
+    }
+
+    @Override
+    public void clear(Callback<Void> callback) {
+        executor.execute(new Runnable() {
+            @Override
+            public void run() {
+                try {
+                    Thread.sleep(400L);
+                } catch (InterruptedException e) {
+                    e.printStackTrace();
+                }
+
+                result.clear();
+
+                mainThreadHandler.post(new Runnable() {
+                    @Override
+                    public void run() {
+                        callback.onSuccess(null);
+                    }
+                });
+            }
+        });
+
     }
 }

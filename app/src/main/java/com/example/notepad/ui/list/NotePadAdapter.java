@@ -25,6 +25,11 @@ public class NotePadAdapter extends RecyclerView.Adapter<NotePadAdapter.NotePadV
     public void addNotePad(NotePad result) {
         notes.add(result);
     }
+    public int deleteNote(NotePad selectedNote) {
+        int index = notes.indexOf(selectedNote);
+        notes.remove(index);
+        return index;
+    }
 
     interface OnNoteClicked {
         void onNoteClicked(NotePad note);
