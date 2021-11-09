@@ -24,6 +24,37 @@ public class NotePadListPresenter {
         view.showNotePad(repository.getNotes());
     }
 
+    public void removeAll() {
+
+        repository.clear(new Callback<Void>() {
+            @Override
+            public void onSuccess(Void result) {
+                view.clearNotes();
+            }
+
+            @Override
+            public void onError(Throwable error) {
+
+            }
+        });
+    }
+
+    public void delete(NotePad selectedNote) {
+
+        repository.delete(selectedNote, new Callback<Void>() {
+            @Override
+            public void onSuccess(Void result) {
+                view.deleteNote(selectedNote);
+            }
+
+            @Override
+            public void onError(Throwable error) {
+
+            }
+        });
+
+    }
+
     public void add(String newNote, String enterText) {
         repository.add(newNote, enterText, new Callback<NotePad>() {
             @Override

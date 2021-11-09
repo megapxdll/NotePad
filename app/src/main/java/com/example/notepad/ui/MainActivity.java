@@ -1,13 +1,11 @@
 package com.example.notepad.ui;
 
+import android.annotation.SuppressLint;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
-import android.view.Gravity;
 import android.view.Menu;
 import android.view.MenuItem;
-import android.view.MenuInflater;
-import android.view.View;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
@@ -15,7 +13,6 @@ import androidx.appcompat.app.ActionBarDrawerToggle;
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
-import androidx.core.view.GravityCompat;
 import androidx.drawerlayout.widget.DrawerLayout;
 import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentResultListener;
@@ -24,20 +21,16 @@ import com.example.notepad.R;
 import com.example.notepad.domain.NotePad;
 import com.example.notepad.ui.details.NotePadDetailsActivity;
 import com.example.notepad.ui.details.NotePadDetailsFragment;
-import com.example.notepad.ui.fm.FmActivity;
 import com.example.notepad.ui.list.NotePadListFragment;
-import com.example.notepad.ui.menu.NavMenuActivity;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
+import com.google.android.material.navigation.NavigationBarItemView;
 import com.google.android.material.navigation.NavigationView;
 
 public class MainActivity extends AppCompatActivity {
     private static final String ARG_NOTE = "ARG_NOTE";
 
     private NotePad selectedNotePad;
-
-    private DrawerLayout navigation_menu;
-
-    private FloatingActionButton fmoptions;
+    private FloatingActionButton fmOptions;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -63,26 +56,22 @@ public class MainActivity extends AppCompatActivity {
                 bundle.putParcelable(ARG_NOTE, selectedNotePad);
 
                 fragmentManager.setFragmentResult(NotePadDetailsFragment.KEY_NOTES_LIST_DETAILS, bundle);
-            } else {
             }
         }
 
-        getSupportFragmentManager().setFragmentResultListener(NotePadListFragment.KEY_NOTES_LIST_ACTIVITY, this, new FragmentResultListener() {
-            @Override
-            public void onFragmentResult(@NonNull String requestKey, @NonNull Bundle result) {
+        getSupportFragmentManager().setFragmentResultListener(NotePadListFragment.KEY_NOTES_LIST_ACTIVITY, this, (requestKey, result) -> {
 
-                selectedNotePad = result.getParcelable(NotePadListFragment.ARG_NOTE);
+            selectedNotePad = result.getParcelable(NotePadListFragment.ARG_NOTE);
 
-                if (isLandscape) {
+            if (isLandscape) {
 
-                    fragmentManager.setFragmentResult(NotePadDetailsFragment.KEY_NOTES_LIST_DETAILS, result);
-                } else {
+                fragmentManager.setFragmentResult(NotePadDetailsFragment.KEY_NOTES_LIST_DETAILS, result);
+            } else {
 
-                    Intent intent = new Intent(MainActivity.this, NotePadDetailsActivity.class);
-                    intent.putExtra(NotePadDetailsFragment.ARG_NOTE, selectedNotePad);
+                Intent intent = new Intent(MainActivity.this, NotePadDetailsActivity.class);
+                intent.putExtra(NotePadDetailsFragment.ARG_NOTE, selectedNotePad);
 
-                    startActivity(intent);
-                }
+                startActivity(intent);
             }
         });
     }
@@ -94,6 +83,7 @@ public class MainActivity extends AppCompatActivity {
         return super.onCreateOptionsMenu(menu);
     }
 
+    @SuppressLint("NonConstantResourceId")
     @Override
     public boolean onOptionsItemSelected(@NonNull MenuItem item) {
         int id = item.getItemId();
@@ -109,6 +99,9 @@ public class MainActivity extends AppCompatActivity {
                 return true;
             case R.id.action_drawer_exit:
                 showExitAlertDialog();
+            case R.id.action_clear:
+
+                Toast.makeText(getApplicationContext(), "Cleared", Toast.LENGTH_SHORT).show();
                 return true;
         }
 
@@ -130,9 +123,10 @@ public class MainActivity extends AppCompatActivity {
     }
 
 
+    @SuppressLint("NonConstantResourceId")
     private void initDrawer(Toolbar toolbar) {
 
-        navigation_menu = (DrawerLayout) findViewById(R.id.navigation_menu);
+        DrawerLayout navigation_menu = (DrawerLayout) findViewById(R.id.navigation_menu);
         ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(
                 this, navigation_menu, toolbar,
                 R.string.navigation_drawer_open,
@@ -142,20 +136,20 @@ public class MainActivity extends AppCompatActivity {
 
         // Обработка навигационного меню
         NavigationView navigationView = findViewById(R.id.navigation_view);
-        navigationView.setNavigationItemSelectedListener(new NavigationView.OnNavigationItemSelectedListener() {
-            @Override
-            public boolean onNavigationItemSelected(@NonNull MenuItem item) {
-                int id = item.getItemId();
-                switch (id) {
-                    case R.id.action_drawer_about:
-                        Toast.makeText(getApplicationContext(), "About window opened", Toast.LENGTH_SHORT).show();
-                        return true;
-                    case R.id.action_drawer_exit:
-                        Toast.makeText(getApplicationContext(), "Settings window opened", Toast.LENGTH_SHORT).show();
-                        return true;
-                }
-                return false;
+        navigationView.setNavigationItemSelectedListener(item -> {
+            int id = item.getItemId();
+            switch (id) {
+                case R.id.action_drawer_about:
+                    Toast.makeText(getApplicationContext(), "About window opened", Toast.LENGTH_SHORT).show();
+                    return true;
+                case R.id.action_drawer_exit:
+                    Toast.makeText(getApplicationContext(), "Settings window opened", Toast.LENGTH_SHORT).show();
+                    return true;
+                case R.id.action_clear:
+                    Toast.makeText(getApplicationContext(), "Cleared", Toast.LENGTH_SHORT).show();
+                    return true;
             }
+            return false;
         });
     }
 
@@ -179,18 +173,8 @@ public class MainActivity extends AppCompatActivity {
                 //.setIcon(R.mipmap.ic_launcher_round)
                 // Из этого окна нельзя выйти кнопкой Back
                 //.setCancelable(false)
-                .setPositiveButton(getResources().getString(R.string.yes_button), new DialogInterface.OnClickListener() {
-                    @Override
-                    public void onClick(DialogInterface dialogInterface, int i) {
-                        Toast.makeText(MainActivity.this, "Yes!", Toast.LENGTH_SHORT).show();
-                    }
-                })
-                .setNegativeButton(getResources().getString(R.string.no_button), new DialogInterface.OnClickListener() {
-                    @Override
-                    public void onClick(DialogInterface dialogInterface, int i) {
-                        Toast.makeText(MainActivity.this, "No!", Toast.LENGTH_SHORT).show();
-                    }
-                })
+                .setPositiveButton(getResources().getString(R.string.yes_button), (dialogInterface, i) -> Toast.makeText(MainActivity.this, "Yes!", Toast.LENGTH_SHORT).show())
+                .setNegativeButton(getResources().getString(R.string.no_button), (dialogInterface, i) -> Toast.makeText(MainActivity.this, "No!", Toast.LENGTH_SHORT).show())
                 .setNeutralButton(getResources().getString(R.string.cancel_button), null)
                 .show();
     }

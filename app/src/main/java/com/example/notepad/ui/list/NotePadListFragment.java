@@ -1,14 +1,9 @@
 package com.example.notepad.ui.list;
 
-import static android.content.Context.MODE_PRIVATE;
-
-import android.content.Intent;
-import android.content.SharedPreferences;
+import android.annotation.SuppressLint;
 import android.os.Bundle;
 import android.view.ContextMenu;
 import android.view.View;
-import android.widget.LinearLayout;
-import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -18,15 +13,17 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.notepad.R;
+import com.example.notepad.domain.FireStoreNotePadRepository;
 import com.example.notepad.domain.NotePad;
-import com.example.notepad.domain.InMemoryNotePadRepository;
 import com.example.notepad.domain.SharedPrefNotePadRepository;
 import com.example.notepad.ui.MainActivity;
-import com.example.notepad.ui.fm.FmActivity;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
+import com.google.android.material.navigation.NavigationBarItemView;
 
 import android.view.MenuItem;
+import android.widget.Button;
 
+import java.util.Collections;
 import java.util.List;
 
 public class NotePadListFragment extends Fragment implements NotePadListView {
@@ -36,8 +33,6 @@ public class NotePadListFragment extends Fragment implements NotePadListView {
 
     private FragmentActivity fragmentActivity;
     private NotePad selectedNotePad;
-
-    private LinearLayout notepadListRoot;
 
     private NotePadAdapter adapter;
     private NotePadListPresenter presenter;
@@ -52,18 +47,15 @@ public class NotePadListFragment extends Fragment implements NotePadListView {
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-        presenter = new NotePadListPresenter(this, new SharedPrefNotePadRepository(requireActivity().getApplicationContext()));
+        presenter = new NotePadListPresenter(this, new FireStoreNotePadRepository());
         adapter = new NotePadAdapter(this);
 
-        adapter.setNoteClicked(new NotePadAdapter.OnNoteClicked() {
-            @Override
-            public void onNoteClicked(NotePad note) {
-                Bundle bundle = new Bundle();
-                bundle.putParcelable(ARG_NOTE, note);
+        adapter.setNoteClicked(note -> {
+            Bundle bundle = new Bundle();
+            bundle.putParcelable(ARG_NOTE, note);
 
-                getParentFragmentManager()
-                        .setFragmentResult(KEY_NOTES_LIST_ACTIVITY, bundle);
-            }
+            getParentFragmentManager()
+                    .setFragmentResult(KEY_NOTES_LIST_ACTIVITY, bundle);
         });
 
     }
@@ -80,20 +72,12 @@ public class NotePadListFragment extends Fragment implements NotePadListView {
         setHasOptionsMenu(true);
         super.onViewCreated(view, savedInstanceState);
 
-
-        notepadListRoot = view.findViewById(R.id.notepad_root);
+        //LinearLayout notepadListRoot = view.findViewById(R.id.notepad_root);
 
         RecyclerView notesList = view.findViewById(R.id.notes_list);
 
         FloatingActionButton fmOptions = view.findViewById(R.id.fm_options);
-        fmOptions.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                presenter.add("new note", "enter text");
-                //Intent intent = new Intent(getActivity(), FmActivity.class);
-                //startActivity(intent);
-            }
-        });
+        fmOptions.setOnClickListener(v -> presenter.add("new note", "enter text"));
 
         RecyclerView.LayoutManager lm = new LinearLayoutManager(requireContext(), LinearLayoutManager.VERTICAL, false);
         //RecyclerView.LayoutManager lm = new GridLayoutManager(requireContext(), 2);
@@ -113,42 +97,33 @@ public class NotePadListFragment extends Fragment implements NotePadListView {
         super.onSaveInstanceState(outState);
     }
 
+    @SuppressLint("NotifyDataSetChanged")
     @Override
     public void showNotePad(List<NotePad> notes) {
 
         adapter.setNotes(notes);
         adapter.notifyDataSetChanged();
-        /**
-        for (NotePad notePad : notes) {
-            View itemView = LayoutInflater.from(requireContext()).inflate(R.layout.item_note, notepadListRoot, false);
+    }
 
-            itemView.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-
-                    Bundle bundle = new Bundle();
-                    bundle.putParcelable(ARG_NOTE, notePad);
-
-                    getParentFragmentManager()
-                            .setFragmentResult(KEY_NOTES_LIST_ACTIVITY, bundle);
-                }
-            });
-
-            TextView description = itemView.findViewById(R.id.description);
-            description.setText(notePad.getDescription());
-
-            TextView name = itemView.findViewById(R.id.note_name);
-            name.setText(notePad.getName());
-
-            notepadListRoot.addView(itemView);
-        }
-         */
+    @SuppressLint("NotifyDataSetChanged")
+    @Override
+    public void clearNotes() {
+        adapter.setNotes(Collections.emptyList());
+        adapter.notifyDataSetChanged();
     }
 
     @Override
     public void addNotePad(NotePad result) {
         adapter.addNotePad(result);
         adapter.notifyItemInserted(adapter.getItemCount() - 1);
+    }
+
+    @Override
+    public void deleteNote(NotePad selectedNote) {
+
+        int position = adapter.deleteNote(selectedNote);
+
+        adapter.notifyItemRemoved(position);
     }
 
     @Override
@@ -160,8 +135,8 @@ public class NotePadListFragment extends Fragment implements NotePadListView {
 
     @Override
     public boolean onContextItemSelected(@NonNull MenuItem item) {
-        if (item.getItemId() == R.id.action_clear) {
-            presenter.clear(selectedNotePad);
+        if (item.getItemId() == R.id.action_delete) {
+            presenter.delete(selectedNotePad);
             return true;
         }
 

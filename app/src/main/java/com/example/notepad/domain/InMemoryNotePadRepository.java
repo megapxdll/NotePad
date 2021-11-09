@@ -21,6 +21,7 @@ public class InMemoryNotePadRepository implements NotePadRepository {
     private final Handler mainThreadHandler = new Handler(Looper.getMainLooper());
 
     private final List<NotePad> result = new ArrayList<>();
+
     @Override
     public List<NotePad> getNotes() {
         executor.execute(new Runnable() {
@@ -53,24 +54,51 @@ public class InMemoryNotePadRepository implements NotePadRepository {
 
 
     @Override
-    public void delete(NotePad note) {
+    public void delete(NotePad note, Callback<Void> callback) {
+
+        executor.execute(new Runnable() {
+            @Override
+            public void run() {
+                try {
+                    Thread.sleep(400L);
+                } catch (InterruptedException e) {
+                    e.printStackTrace();
+                }
+
+                result.remove(note);
+
+                mainThreadHandler.post(new Runnable() {
+                    @Override
+                    public void run() {
+                        callback.onSuccess(null);
+                    }
+                });
+            }
+        });
 
     }
 
     @Override
-    public void clear() {
-        result.clear();
-
-        mainThreadHandler.post(new Runnable() {
+    public void clear(Callback<Void> callback) {
+        executor.execute(new Runnable() {
             @Override
             public void run() {
-                if (new Random().nextBoolean()) {
-
+                try {
+                    Thread.sleep(400L);
+                } catch (InterruptedException e) {
+                    e.printStackTrace();
                 }
-                else {
 
-                }
+                result.clear();
+
+                mainThreadHandler.post(new Runnable() {
+                    @Override
+                    public void run() {
+                        callback.onSuccess(null);
+                    }
+                });
             }
         });
+
     }
 }

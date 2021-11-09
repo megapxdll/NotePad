@@ -8,7 +8,7 @@ public interface NotePadRepository {
 
     void add(String title, String message, Callback<NotePad> callback);
 
-    void delete(NotePad note);
+    void delete(NotePad notePad, Callback<Void> callback);
 
-    void clear();
+    void clear(Callback<Void> callback);
 }
